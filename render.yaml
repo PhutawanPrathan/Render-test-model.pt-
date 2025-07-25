@@ -3,9 +3,6 @@ services:
     name: yolo-cloud-api
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: python cloud_server.py
-    envVars:
-      - key: FLASK_ENV
-        value: production
+    startCommand: gunicorn app:app
     plan: free
-    autoDeploy: true
+
