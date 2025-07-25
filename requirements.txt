@@ -1,0 +1,4 @@
+flask
+torch
+ultralytics>=8.1.28
+Pillow
