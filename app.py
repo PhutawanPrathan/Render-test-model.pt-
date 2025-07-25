@@ -24,5 +24,4 @@ def upload():
         "results": results.pandas().xyxy[0].to_dict(orient="records")
     })
 
-# ให้ gunicorn หา app นี้
-app = app
+
