@@ -1,15 +1,11 @@
-# app.py
 from flask import Flask, request, jsonify
 from PIL import Image
-import torch
+from ultralytics import YOLO
 import time
 import os
 
 app = Flask(__name__)
-
-# โหลดโมเดล yolov10n.pt จาก local
-model = torch.load("mix(320x160).pt", map_location="cpu")
-model.eval()
+model = YOLO("mix(320x160).pt")  # โหลดจาก Ultralytics
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -17,13 +13,26 @@ def upload():
         return jsonify({"error": "No image uploaded"}), 400
 
     img = Image.open(request.files['image'].stream).convert("RGB")
+
     t1 = time.time()
     results = model(img)
     t2 = time.time()
 
+    detections = results[0].boxes.xyxy.cpu().tolist()
+    confidences = results[0].boxes.conf.cpu().tolist()
+    classes = results[0].boxes.cls.cpu().tolist()
+
+    data = []
+    for xyxy, conf, cls in zip(detections, confidences, classes):
+        data.append({
+            "bbox": xyxy,
+            "confidence": round(conf, 2),
+            "class_id": int(cls)
+        })
+
     return jsonify({
         "inference_time_ms": round((t2 - t1) * 1000, 2),
-        "results": results.pandas().xyxy[0].to_dict(orient="records")
+        "results": data
     })
 
 if __name__ == "__main__":
