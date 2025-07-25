@@ -5,7 +5,7 @@ import time
 import os
 
 app = Flask(__name__)
-model = YOLO("mix(320x160).pt")  # โหลดจาก Ultralytics
+model = YOLO("mix.pt")  # โหลดจาก Ultralytics
 
 @app.route('/upload', methods=['POST'])
 def upload():
