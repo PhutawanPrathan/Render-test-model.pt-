@@ -7,6 +7,10 @@ import os
 app = Flask(__name__)
 model = YOLO("mix(320x160).pt")  # โหลดจาก Ultralytics
 
+@app.route("/")
+def index():
+    return "✅ Model API is running!"
+    
 @app.route('/upload', methods=['POST'])
 def upload():
     if 'image' not in request.files:
