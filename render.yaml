@@ -3,6 +3,6 @@ services:
     name: yolo-cloud-api
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    startCommand: python app:app
     plan: free
 
